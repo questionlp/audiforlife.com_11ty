@@ -1,0 +1,34 @@
+---
+eleventyNavigation: {
+    key: Home,
+    order 1
+}
+---
+
+<h1>Audi For Life</h1>
+
+<p>
+Welcome to the archived version of the Audi For Life blog. This blog was an outlet
+for the time I was actively part of the Audi online community on social media before
+being wound down in 2017.
+</p>
+
+<p>
+The content of this site was ported over from the previously WordPress-powered blog
+with fix some issues with formatting. Many of the external links are broken have not
+been fixed.
+</p>
+
+<h2>Blog Posts</h2>
+
+{% set postslist = collections.posts %}
+{% include "postslist.njk" %}
+
+{# List every content page in the project #}
+{#
+<ul>
+    {%- for entry in collections.all %}
+    <li><a href="{{ entry.url }}"><code>{{ entry.url }}</code></a></li>
+    {%- endfor %}
+</ul>
+#}

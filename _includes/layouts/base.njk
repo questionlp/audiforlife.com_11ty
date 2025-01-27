@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="{{ metadata.language }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {%- if title %}
+        <title>{{ title }} | {{ metadata.title }}</title>
+        {%- else %}
+        <title>{{ metadata.title }}</title>
+        {%- endif %}
+        <meta name="description" content="{{ description or metadata.description }}">
+        <link rel="alternate" href="feed/feed.xml" type="application/atom+xml" title="{{ metadata.title }}">
+
+        {#- Uncomment this if you’d like folks to know that you used Eleventy to build your site!  #}
+        <meta name="generator" content="{{ eleventy.generator }}">
+
+        {#-
+        Plain-text bundles are provided via the `eleventy-plugin-bundle` plugin:
+        1. CSS:
+            * Add to a per-page bundle using `{% css %}{% endcss %}`
+            * Retrieve bundle content using `{% getBundle "css" %}` or `{% getBundleFileUrl "css" %}`
+        2. Or for JavaScript:
+            * Add to a per-page bundle using `{% js %}{% endjs %}`
+            * Retrieve via `{% getBundle "js" %}` or `{% getBundleFileUrl "js" %}`
+        3. Learn more: https://github.com/11ty/eleventy-plugin-bundle
+        #}
+
+        {%- css %}{% include "public/css/source-sans.css" %}{% endcss %}
+        {%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss %}
+        {%- css %}{% include "public/css/prism-diff.css" %}{%- endcss %}
+        {%- css %}{% include "public/css/index.css" %}{% endcss %}
+        <link rel="stylesheet" href="{% getBundleFileUrl "css" %}">
+
+        {#- Add the heading-anchors web component to the JavaScript bundle #}
+        {%- js %}{% include "node_modules/@zachleat/heading-anchors/heading-anchors.js" %}{% endjs %}
+
+        {#- Google Analytics #}
+        {%- if siteConfig.environment == "production" and analytics.google.id %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.google.id }}"></script>
+        <script>
+            window['ga-disable-{{ analytics.google.id }}'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '{{ analytics.google.id }}');
+        </script>
+        {%- endif %}
+
+        {#- Umami Analytics #}
+        {%- if siteConfig.environment == "production" and analytics.umami.url and analytics.umami.website_id and analytics.umami.domains %}
+        <script defer src="{{ analytics.umami.url }}" data-website-id="{{ analytics.umami.website_id }}" data-domains="{{ analytics.umami.domains }}"></script>
+        {%- elif siteConfig.environment == "production" and analytics.umami.url and analytics.umami.website_id %}
+        <script defer src="{{ analytics.umami.url }}" data-website-id="{{ analytics.umami.website_id }}"></script>
+        {%- endif %}
+    </head>
+    <body>
+        <a href="#skip" class="visually-hidden">Skip to main content</a>
+
+        <header>
+            <a href="/" class="home-link">{{ metadata.title }}</a>
+
+            {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
+            <nav>
+                <h2 class="visually-hidden">Top level navigation menu</h2>
+                <ul class="nav">
+                {%- for entry in collections.all | eleventyNavigation %}
+                    <li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+                {%- endfor %}
+                </ul>
+            </nav>
+        </header>
+
+        <main id="skip">
+            {{ content | safe }}
+        </main>
+
+        <footer>
+            <p id="copyright">
+                Copyright &copy; {% copyrightDate %} by <a href="{{ metadata.author.url }}">{{ metadata.author.name }}</a>.
+                Code: <a href="https://github.com/questionlp/audiforlife_11ty/blob/main/LICENSE.md#mit-license">MIT</a>, Content: All rights reserved, unless otherwise noted.
+            </p>
+        </footer>
+
+        <!-- This page `{{ page.url }}` was built on {% currentBuildDate %} -->
+        <script type="module" src="{% getBundleFileUrl "js" %}"></script>
+    </body>
+</html>
