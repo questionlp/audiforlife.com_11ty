@@ -1,0 +1,6 @@
+LICENSE
+=======
+
+The copyright for all files located under the `blog` directory, along with `about.md`, `lovemys5.md` and `my-audis.md`, are published under the traditional copyright terms for the United States:
+
+Copyright (c) 2010–2025 Linh Pham. All Rights Reserved.
