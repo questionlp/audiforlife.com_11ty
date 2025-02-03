@@ -5,6 +5,7 @@ import pluginNavigation from "@11ty/eleventy-navigation";
 // import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import pluginFilters from "./_config/filters.js";
 import "dotenv/config";
+import _ from "lodash";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
@@ -36,6 +37,57 @@ export default async function(eleventyConfig) {
     eleventyConfig.addBundle("js", {
         toFileDirectory: "dist",
     });
+
+    // Source: https://blog.tomayac.com/2024/11/02/eleventy-11ty-year-year-month-and-year-month-day-indexes/
+    // Year collection
+    eleventyConfig.addCollection('postsByYear', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => post.date.getFullYear())
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Year / Month collection
+    eleventyConfig.addCollection('postsByYearMonth', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => {
+                const year = post.date.getFullYear();
+                const month = String(post.date.getMonth() + 1).padStart(2, '0');
+                return `${year}/${month}`;
+            })
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Year / Month / Day collection
+    eleventyConfig.addCollection('postsByYearMonthDay', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => {
+                const year = post.date.getFullYear();
+                const month = String(post.date.getMonth() + 1).padStart(2, '0');
+                const day = String(post.date.getDate()).padStart(2, '0');
+                return `${year}/${month}/${day}`;
+            })
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Helper filter to format month names
+    eleventyConfig.addFilter('monthName', (monthNum) => {
+        const date = new Date(2000, parseInt(monthNum) - 1, 1);
+        return date.toLocaleString('en-US', { month: 'long' });
+    });
+
+    // Helper filters for parsing date parts
+    eleventyConfig.addFilter('getYear', (dateStr) => dateStr.split('/')[0]);
+    eleventyConfig.addFilter('getMonth', (dateStr) => dateStr.split('/')[1]);
+    eleventyConfig.addFilter('getDay', (dateStr) => dateStr.split('/')[2]);
 
     // Official plugins
     eleventyConfig.addPlugin(pluginSyntaxHighlight, {
