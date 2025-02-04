@@ -7,7 +7,7 @@ layout: layouts/base.njk
     <div class="post-metadata">
         <div class="metadata-row">
             <span class="metadata-label">Date:</span>
-            <time datetime="{{ page.date | isoDateString }}">{{ page.date | readableDate }}</time>
+            <time datetime="{{ page.date | isoDateString }}">{{ page.date | readableDateTime }}</time>
         </div>
 
         {%- if categories.length > 0 %}

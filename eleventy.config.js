@@ -1,16 +1,19 @@
+import { DateTime } from 'luxon';
 import { IdAttributePlugin, InputPathToUrlTransformPlugin, HtmlBasePlugin } from "@11ty/eleventy";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
 // import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import pluginFilters from "./_config/filters.js";
+import tagList from "./_config/getTagList.js";
 import "dotenv/config";
+import _ from "lodash";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
-export default async function(eleventyConfig) {
+export default async function (eleventyConfig) {
     // Drafts, see also _data/eleventyDataSchema.js
     eleventyConfig.addPreprocessor("drafts", "*", (data, content) => {
-        if(data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
+        if (data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
             return false;
         }
     });
@@ -18,7 +21,7 @@ export default async function(eleventyConfig) {
     // Copy the contents of the `public` folder to the output folder
     // For example, `./public/css/` ends up in `_site/css/`
     eleventyConfig
-        .addPassthroughCopy({"./public/": "/"})
+        .addPassthroughCopy({ "./public/": "/" })
         .addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
 
     // Run Eleventy when these files change:
@@ -36,6 +39,76 @@ export default async function(eleventyConfig) {
     eleventyConfig.addBundle("js", {
         toFileDirectory: "dist",
     });
+
+    eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
+
+    eleventyConfig.addFilter('readableDate', (dateObj) => {
+        return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat(
+            'dd LLL yyyy'
+        );
+    });
+
+    eleventyConfig.addFilter('htmlDateString', (dateObj) => {
+        return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat('yyyy-LL-dd');
+    });
+
+    eleventyConfig.addFilter('getCurrentYear', () => {
+        return new Date().getFullYear();
+    });
+
+    eleventyConfig.addCollection('tagList', tagList);
+
+    // Year collection
+    eleventyConfig.addCollection('postsByYear', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => post.date.getFullYear())
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Year / Month collection
+    eleventyConfig.addCollection('postsByYearMonth', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => {
+                const year = post.date.getFullYear();
+                const month = String(post.date.getMonth() + 1).padStart(2, '0');
+                return `${year}/${month}`;
+            })
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Based on: https://blog.tomayac.com/2024/11/02/eleventy-11ty-year-year-month-and-year-month-day-indexes/
+    // Year / Month / Day collection
+    eleventyConfig.addCollection('postsByYearMonthDay', (collection) => {
+        return _.chain(collection.getAllSorted())
+            .filter((item) => 'tags' in item.data && item.data.tags.includes('posts'))
+            .groupBy((post) => {
+                const year = post.date.getFullYear();
+                const month = String(post.date.getMonth() + 1).padStart(2, '0');
+                const day = String(post.date.getDate()).padStart(2, '0');
+                return `${year}/${month}/${day}`;
+            })
+            .toPairs()
+            .reverse()
+            .value();
+    });
+
+    // Helper filter to format month names
+    eleventyConfig.addFilter('monthName', (monthNum) => {
+        const date = new Date(2000, parseInt(monthNum) - 1, 1);
+        return date.toLocaleString('en-US', { month: 'long' });
+    });
+
+    // Helper filters for parsing date parts
+    eleventyConfig.addFilter('getYear', (dateStr) => dateStr.split('/')[0]);
+    eleventyConfig.addFilter('getMonth', (dateStr) => dateStr.split('/')[1]);
+    eleventyConfig.addFilter('getDay', (dateStr) => dateStr.split('/')[2]);
+
 
     // Official plugins
     eleventyConfig.addPlugin(pluginSyntaxHighlight, {
@@ -79,9 +152,9 @@ export default async function(eleventyConfig) {
     eleventyConfig.addPlugin(pluginFilters);
 
     // eleventyConfig.addPlugin(IdAttributePlugin, {
-        // by default we use Eleventy’s built-in `slugify` filter:
-        // slugify: eleventyConfig.getFilter("slugify"),
-        // selector: "h1,h2,h3,h4,h5,h6", // default
+    // by default we use Eleventy’s built-in `slugify` filter:
+    // slugify: eleventyConfig.getFilter("slugify"),
+    // selector: "h1,h2,h3,h4,h5,h6", // default
     // });
 
     eleventyConfig.addShortcode("currentBuildDate", () => {

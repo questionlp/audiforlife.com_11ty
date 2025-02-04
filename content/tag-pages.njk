@@ -4,12 +4,10 @@ const pagination = {
     data: "collections",
     size: 1,
     alias: "tag",
-    filter: ["all", "posts"],
+    // filter: ["all", "nav", "post", "posts", "tagList"],
     // addAllPagesToCollections: true,
 };
-
 const eleventyExcludeFromCollections = true;
-
 const eleventyComputed = {
     title: "Tagged '{{ tag }}'",
     permalink: function(data) {
@@ -22,4 +20,4 @@ const eleventyComputed = {
 {% set postslist = collections[ tag ] %}
 {% include "postslist.njk" %}
 
-<p>See <a href="tag.njk">all tags</a>.</p>
+<p>See <a href="{{ "/tag" | url }}">all tags</a>.</p>
