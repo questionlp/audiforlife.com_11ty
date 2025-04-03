@@ -1,0 +1,37 @@
+---
+eleventyNavigation: {
+    key: Search,
+    order: 4
+}
+---
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+
+<style>
+  :root {
+    --pagefind-ui-font: "IBM Plex Sans", -apple-system, system-ui, sans-serif;
+    --pagefind-ui-scale: 1;
+  }
+
+  .search {
+    margin-top: 1rem;
+  }
+
+  .pagefind-ui--reset mark {
+    padding: 0.25rem !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --pagefind-ui-primary: #eeeeee;
+      --pagefind-ui-text: #eeeeee;
+      --pagefind-ui-background: #152028;
+      --pagefind-ui-border: #152028;
+      --pagefind-ui-tag: #152028;
+    }
+  }
+</style>
+
+<div id="search" class="search"></div>
+
+<script src="/pagefind/pagefind-ui.js" onload="new PagefindUI({ element: '#search', showImages: false });"></script>

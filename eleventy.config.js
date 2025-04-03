@@ -8,6 +8,7 @@ import pluginFilters from "./_config/filters.js";
 import tagList from "./_config/getTagList.js";
 import "dotenv/config";
 import _ from "lodash";
+import { execSync } from 'child_process';
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function (eleventyConfig) {
@@ -163,6 +164,9 @@ export default async function (eleventyConfig) {
 
     eleventyConfig.addShortcode("copyrightDate", () => `2010&ndash;${new Date().getFullYear()}`);
 
+    eleventyConfig.on('eleventy.after', () => {
+        execSync(`npx pagefind --site _site --glob \"**/*.html\"`, { encoding: 'utf-8' })
+    })
 
     // Features to make your build faster (when you need them)
 
