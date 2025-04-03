@@ -8,4 +8,5 @@ fi
 
 mv /u01/www/audiforlife.com /u01/www/audiforlife.com.old
 
-npx @11ty/eleventy --output=/u01/www/audiforlife.com
+npx @11ty/eleventy
+mv _site /u01/www/audiforlife.com
