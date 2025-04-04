@@ -6,6 +6,7 @@ eleventyNavigation: {
 ---
 
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
 
 <style>
   :root {
@@ -33,5 +34,15 @@ eleventyNavigation: {
 </style>
 
 <div id="search" class="search"></div>
-
-<script src="/pagefind/pagefind-ui.js" onload="new PagefindUI({ element: '#search', showImages: false });"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI(
+            {
+                element: "#search",
+                showSubResults: false,
+                showImages: false,
+                autofocus: true
+            }
+        );
+    });
+</script>
