@@ -41,8 +41,6 @@
     "@11ty/eleventy-plugin-rss": "^3.0.0",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
     "@11ty/recursive-copy": "5.0.2",
-    "@lavamoat/allow-scripts": "^5.0.2",
-    "@lavamoat/preinstall-always-fail": "^3.0.0",
     "brace-expansion": "^5.0.6",
     "cross-env": "^7.0.3",
     "luxon": "^3.7.2",
@@ -56,10 +54,8 @@
     "lodash": "^4.17.23",
     "pagefind": "^1.4.0"
   },
-  "lavamoat": {
-    "allowScripts": {
-      "@11ty/eleventy-img>sharp#0.33.5": false,
-      "@lavamoat/preinstall-always-fail#3.0.0": false
-    }
+  "allowScripts": {
+    "@11ty/eleventy-img>sharp#0.33.5": false,
+    "@lavamoat/preinstall-always-fail#3.0.0": false
   }
 }
