@@ -55,7 +55,6 @@
     "pagefind": "^1.4.0"
   },
   "allowScripts": {
-    "@11ty/eleventy-img>sharp#0.33.5": false,
-    "@lavamoat/preinstall-always-fail#3.0.0": false
+    "@11ty/eleventy-img>sharp#0.33.5": false
   }
 }
