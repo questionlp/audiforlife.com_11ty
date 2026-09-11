@@ -135,9 +135,9 @@ export default async function (eleventyConfig) {
         },
         metadata: {
             language: "en",
-            title: "blog.wwdt.me",
-            subtitle: "Wait Wait Stats Project Development Blog Archive",
-            base: "https://blog.wwdt.me/",
+            title: "Audi For Life",
+            subtitle: "Audi For Life Blog Archive",
+            base: "https://audiforlife.com/",
             author: {
                 name: "Linh Pham"
             }
