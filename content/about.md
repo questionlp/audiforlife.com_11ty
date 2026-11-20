@@ -1,8 +1,7 @@
 ---
-eleventyNavigation: {
-    key: "About",
+eleventyNavigation:
+    key: "About"
     order: 2
-}
 ---
 
 # About

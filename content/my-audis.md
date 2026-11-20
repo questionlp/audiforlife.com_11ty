@@ -1,8 +1,7 @@
 ---
-eleventyNavigation: {
-    key: 'My Audis',
+eleventyNavigation:
+    key: 'My Audis'
     order: 3
-}
 ---
 
 # My Audis

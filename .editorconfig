@@ -10,5 +10,8 @@ indent_size = 4
 indent_style = space
 charset = utf-8
 
+[*.njk]
+indent_size = 2
+
 [{package,package-lock}.json]
 indent_size = 2

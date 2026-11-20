@@ -1,8 +1,7 @@
 ---
-eleventyNavigation: {
-    key: '#LoveMyS5',
+eleventyNavigation:
+    key: '#LoveMyS5'
     order: 3
-}
 ---
 
 # Story of #LoveMyS5
